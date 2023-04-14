@@ -1,13 +1,12 @@
 require("dotenv").config();
 
-const publicIp = require("public-ip");
-
 const Discord = require("discord.js");
 const bot = new Discord.Client();
 
 const TOKEN = process.env.TOKEN;
 const CHANNEL = process.env.CHANNEL;
 const INTERVAL = process.env.INTERVAL;
+const PORT = process.env.PORT;
 
 bot.login(TOKEN);
 
@@ -16,11 +15,11 @@ var interval;
 var ip;
 
 async function ip_message() {
+  let ipcheck = await import("public-ip");
   return (
-    "Current public ip:\n*IPv4:*\t" +
-    (await publicIp.v4()) +
-    "\n*IPv6:*\t" +
-    (await publicIp.v6())
+    "Current Server ip:\t" +
+    (await ipcheck.publicIp({onlyHttps:true})) + 
+    ".\n*Port:*\t" + PORT + '.'
   );
 }
 
@@ -30,15 +29,23 @@ async function post_ip() {
 }
 
 async function check_ip() {
-  var temp_ip = await publicIp.v4();
+  let ipcheck = await import("public-ip");
+  var temp_ip = await ipcheck.publicIp({onlyHttps:true});
   if (temp_ip !== ip) {
     ip = temp_ip;
     await post_ip();
   }
 }
 
+async function con_Log() {
+  let ip = await import("public-ip");
+  console.log(await ip.publicIp({onlyHttps:true}));
+}
+
 bot.on("ready", () => {
   console.info(`Logged in as ${bot.user.tag}!`);
+
+  con_Log();
 
   channel = bot.channels.get(CHANNEL);
 
