@@ -24,7 +24,7 @@ async function ip_message() {
 }
 
 async function post_ip() {
-  await channel.bulkDelete(5);
+  // await channel.bulkDelete(5);
   await channel.send(await ip_message());
 }
 
@@ -45,7 +45,7 @@ async function con_Log() {
 bot.on("ready", () => {
   console.info(`Logged in as ${bot.user.tag}!`);
 
-  con_Log();
+  //con_Log();
 
   channel = bot.channels.get(CHANNEL);
 
